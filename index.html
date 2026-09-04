@@ -85,7 +85,7 @@
 		const accountForm = document.querySelector('#account-form');
 		const signupOnly = document.querySelector('.signup-only');
 		const accountResult = document.querySelector('.account-result');
-		const API_BASE = window.location.protocol === 'file:' ? 'http://hackclub.app:8000' : '';
+		const API_BASE = window.location.port === '8000' ? '' : 'http://hackclub.app:8000';
 		const socialApp = document.querySelector('#social-app');
 		const feed = document.querySelector('#feed');
 		const postForm = document.querySelector('#post-form');
@@ -103,8 +103,12 @@
 			const token = localStorage.getItem('notai_token');
 			if (token) headers.Authorization = `Bearer ${token}`;
 			const response = await fetch(`${API_BASE}${path}`, {...options, headers});
-			const result = await response.json();
-			if (!response.ok) throw new Error(result.message || 'Request failed.');
+			const text = await response.text();
+			let result;
+			try { result = JSON.parse(text); } catch (error) {
+				throw new Error(`HTTP ${response.status}: server returned non-JSON: ${text.slice(0, 120)}`);
+			}
+			if (!response.ok) throw new Error(result.message || `HTTP ${response.status}: request failed.`);
 			return result;
 		}
 
@@ -171,15 +175,13 @@
 			const controller = new AbortController();
 			const timeout = setTimeout(() => controller.abort(), 8000);
 			try {
-				const response = await fetch(`${API_BASE}/api/${mode}`, {
+				const result = await api(`/api/${mode}`, {
 					method: 'POST',
-					headers: {'Content-Type': 'application/json'},
 					body: JSON.stringify(Object.fromEntries(new FormData(accountForm))),
 					signal: controller.signal
 				});
-				const result = await response.json();
 				accountResult.textContent = result.message || 'The request could not be completed.';
-				if (response.ok && result.token) {
+				if (result.token) {
 					localStorage.setItem('notai_token', result.token);
 					localStorage.setItem('notai_user', JSON.stringify(result.user));
 					currentUser = result.user;
