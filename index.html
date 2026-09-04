@@ -205,7 +205,7 @@
 					currentUser = result.user;
 					accountForm.reset();
 					accountPanel.hidden = true;
-					showSocialApp();
+					window.location.href = 'social.html';
 				}
 			} catch (error) {
 				try {
@@ -253,7 +253,7 @@
 			if (!event.target.matches('[data-remove-post]')) return;
 			try { await api(`/api/moderator/posts/${event.target.dataset.removePost}`, {method: 'DELETE'}); loadModerator(); loadPosts(); } catch (error) { moderatorContent.textContent = error.message; }
 		});
-		if (localStorage.getItem('notai_token')) showSocialApp();
+		if (localStorage.getItem('notai_token')) window.location.href = 'social.html';
 	</script>
 </body>
 </html>

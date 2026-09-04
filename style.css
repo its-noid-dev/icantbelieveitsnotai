@@ -66,6 +66,34 @@ header{box-sizing:border-box;background:#151515;color:#fff;position:relative;
  border:1px solid #fff;background:#fff;padding:.5rem .85rem;
  font-size:.85rem}
 
+.social-main{width:min(90%,700px);margin:2rem auto;text-align:left}
+
+.social-main h2{text-align:center}
+
+.post-form{padding:1rem;background:#151515}
+
+.post-form label{display:block}
+
+.post-form textarea{display:block;width:100%;min-height:80px;margin:.5rem 0;padding:.5rem;box-sizing:border-box}
+
+.post-form button,.post-actions button,.moderator-panel button{padding:.4rem .7rem;color:#000;background:#fff;border:1px solid #fff;cursor:pointer}
+
+#feed-result{min-height:1.2rem}
+
+.post{margin:1rem 0;padding:1rem;background:#151515;border:1px solid #333}
+
+.post small{color:#999}
+
+.post p{white-space:pre-wrap}
+
+.post-actions{display:flex;flex-wrap:wrap;gap:.4rem}
+
+.comment{margin-top:.6rem;padding:.5rem;border-left:2px solid #777}
+
+.moderator-panel{margin-top:2rem;padding:1rem;background:#151515;border:1px solid #555}
+
+.moderator-panel p{border-bottom:1px solid #333;padding-bottom:.5rem}
+
 .account-panel{position:fixed;inset:0;background:rgba(0,0,0,.75);
  display:grid;place-items:center;z-index:5}
 

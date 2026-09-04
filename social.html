@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Community - I Can't Believe It's Not AI!</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<header>
+		<h1><a href="index.html">I Can't Believe It's Not AI!</a></h1>
+		<div class="account-actions"><strong id="current-user"></strong><button type="button" id="logout">Log out</button></div>
+	</header>
+	<main class="social-main">
+		<h2>Community feed</h2>
+		<form id="post-form" class="post-form">
+			<label>What are you thinking?<textarea name="content" maxlength="500" required></textarea></label>
+			<button type="submit">Post</button>
+		</form>
+		<p id="feed-result" role="status"></p>
+		<section id="feed" aria-label="Community posts"></section>
+		<section id="moderator-panel" class="moderator-panel" hidden>
+			<h2>Moderator page</h2>
+			<p>Manage community posts.</p>
+			<div id="moderator-content"></div>
+		</section>
+	</main>
+	<footer><p><a href="index.html">Back to home</a></p><p>Made for Hack Club</p><p>&copy; 2026 Noid.DEV</p></footer>
+	<script>
+		const user = JSON.parse(localStorage.getItem('notai_user') || 'null');
+		const currentUser = document.querySelector('#current-user');
+		const feed = document.querySelector('#feed');
+		const postForm = document.querySelector('#post-form');
+		const feedResult = document.querySelector('#feed-result');
+		const moderatorPanel = document.querySelector('#moderator-panel');
+		const moderatorContent = document.querySelector('#moderator-content');
+		let posts = JSON.parse(localStorage.getItem('notai_posts') || '[]');
+
+		if (!user) window.location.href = 'index.html';
+		currentUser.textContent = user ? user.username : '';
+		if (user && user.role === 'moderator') moderatorPanel.hidden = false;
+
+		function savePosts() { localStorage.setItem('notai_posts', JSON.stringify(posts)); }
+		function safe(value) { return String(value).replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character])); }
+
+		function render() {
+			feed.innerHTML = posts.length ? posts.map(post => {
+				const liked = post.likes.includes(user.id);
+				const bookmarked = post.bookmarks.includes(user.id);
+				return `<article class="post" data-id="${post.id}">
+					<strong>${safe(post.username)}</strong> <small>${safe(post.createdAt)}</small>
+					<p>${safe(post.content)}</p>
+					<div class="post-actions">
+						<button data-action="like">${liked ? 'Unlike' : 'Like'} (${post.likes.length})</button>
+						<button data-action="comment">Comment (${post.comments.length})</button>
+						<button data-action="follow">Follow</button>
+						<button data-action="share">Share</button>
+						<button data-action="bookmark">${bookmarked ? 'Unbookmark' : 'Bookmark'}</button>
+					</div>
+					${post.comments.map(comment => `<div class="comment"><strong>${safe(comment.username)}</strong>: ${safe(comment.content)}</div>`).join('')}
+				</article>`;
+			}).join('') : '<p>No posts yet. Write the first one.</p>';
+			moderatorContent.innerHTML = posts.length ? posts.map(post => `<p><strong>${safe(post.username)}</strong>: ${safe(post.content)} <button data-remove="${post.id}">Remove</button></p>`).join('') : '<p>No posts to moderate.</p>';
+		}
+
+		postForm.addEventListener('submit', event => {
+			event.preventDefault();
+			const content = new FormData(postForm).get('content').trim();
+			posts.unshift({id: Date.now(), userId: user.id, username: user.username, content, createdAt: new Date().toLocaleString(), likes: [], bookmarks: [], comments: []});
+			savePosts();
+			postForm.reset();
+			feedResult.textContent = 'Post published.';
+			render();
+		});
+
+		feed.addEventListener('click', event => {
+			const button = event.target.closest('button[data-action]');
+			if (!button) return;
+			const post = posts.find(item => item.id === Number(button.closest('[data-id]').dataset.id));
+			const action = button.dataset.action;
+			if (action === 'like') post.likes = post.likes.includes(user.id) ? post.likes.filter(id => id !== user.id) : [...post.likes, user.id];
+			if (action === 'bookmark') post.bookmarks = post.bookmarks.includes(user.id) ? post.bookmarks.filter(id => id !== user.id) : [...post.bookmarks, user.id];
+			if (action === 'comment') { const content = window.prompt('Comment'); if (content) post.comments.push({username: user.username, content}); }
+			if (action === 'follow') feedResult.textContent = 'You are now following this person.';
+			if (action === 'share') { navigator.clipboard?.writeText(post.content); feedResult.textContent = 'Post shared.'; }
+			savePosts();
+			render();
+		});
+
+		moderatorContent.addEventListener('click', event => {
+			const id = Number(event.target.dataset.remove);
+			if (!id) return;
+			posts = posts.filter(post => post.id !== id);
+			savePosts();
+			render();
+		});
+
+		document.querySelector('#logout').addEventListener('click', () => {
+			localStorage.removeItem('notai_token');
+			localStorage.removeItem('notai_user');
+			window.location.href = 'index.html';
+		});
+		render();
+	</script>
+</body>
+</html>
