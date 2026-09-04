@@ -263,3 +263,13 @@ header{box-sizing:border-box;background:#151515;color:#fff;position:relative;
 .moderator-panel{border-radius:20px;background:#121624;border-color:#e6ff6a}
 @media(max-width:850px){.app-grid{grid-template-columns:1fr}.community-sidebar{grid-template-columns:1fr 1fr}.social-main{padding-top:2rem}}
 @media(max-width:600px){.community-sidebar{grid-template-columns:1fr}.social-page header{min-height:86px}.feed-heading{align-items:flex-start;gap:1rem;flex-direction:column}}
+
+/* Keep the feed direct and topic-driven. */
+.social-page .post-form,.social-page .post,.social-page .moderator-panel,.social-page .side-card{border-radius:8px}
+.social-page .feed-tabs button,.social-page .post-actions button{border-radius:4px}
+.social-page .feed-status{display:none}
+.hashtag-bar{display:flex;flex-wrap:wrap;gap:.45rem;margin:0 0 1rem}
+.tag-button{padding:.4rem .65rem;color:#aeb9ce;background:#121624;border:1px solid #303a54;border-radius:4px;cursor:pointer}
+.tag-button:hover,.tag-button.active{color:#0b0e15;background:#e6ff6a;border-color:#e6ff6a}
+.inline-tag{padding:0;color:#e6ff6a;background:transparent;border:0;font:inherit;cursor:pointer}
+.inline-tag:hover{text-decoration:underline}
