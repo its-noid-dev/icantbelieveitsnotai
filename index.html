@@ -168,11 +168,14 @@
 			event.preventDefault();
 			accountResult.textContent = 'Working...';
 			const mode = accountForm.dataset.mode;
+			const controller = new AbortController();
+			const timeout = setTimeout(() => controller.abort(), 8000);
 			try {
 				const response = await fetch(`${API_BASE}/api/${mode}`, {
 					method: 'POST',
 					headers: {'Content-Type': 'application/json'},
-					body: JSON.stringify(Object.fromEntries(new FormData(accountForm)))
+					body: JSON.stringify(Object.fromEntries(new FormData(accountForm))),
+					signal: controller.signal
 				});
 				const result = await response.json();
 				accountResult.textContent = result.message || 'The request could not be completed.';
@@ -185,7 +188,9 @@
 					showSocialApp();
 				}
 			} catch (error) {
-				accountResult.textContent = 'Could not reach the server. Check that the app is running.';
+				accountResult.textContent = `DEBUG ERROR: ${error.name === 'AbortError' ? 'Request timed out after 8 seconds.' : error.message}`;
+			} finally {
+				clearTimeout(timeout);
 			}
 		});
 		postForm.addEventListener('submit', async event => {
