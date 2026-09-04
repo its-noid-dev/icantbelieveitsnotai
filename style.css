@@ -314,3 +314,16 @@ header{box-sizing:border-box;background:#151515;color:#fff;position:relative;
 .comment{color:#fff;background:#000;border-left-color:#fff}
 .hashtag-bar{margin-bottom:1rem}
 .social-page footer{background:#000;border-top:1px solid #fff}
+
+/* Final black and white pass */
+*,*::before,*::after{border-radius:0!important;transition:none!important;box-shadow:none!important}
+body,.social-page{color:#fff!important;background:#000!important}
+header,.social-page header,footer,.social-page footer,.post-form,.post,.moderator-panel,.side-card,.account-box{color:#fff!important;background:#000!important;border-color:#fff!important}
+a,.project-links a,.social-page a,.profile-chip,.feed-status,.post-header small,.post p,.post-actions button,.comment{color:#fff!important}
+button,.tag-button,.feed-tabs button,.editor-toolbar button,.image-button,.post-actions button,.account-actions button,.social-link{color:#000!important;background:#fff!important;border-color:#fff!important}
+button:hover,.tag-button:hover,.tag-button.active,.feed-tabs button:hover,.feed-tabs button.active,.editor-toolbar button:hover,.image-button:hover,.post-actions button:hover,.account-actions button:hover,.social-link:hover{color:#fff!important;background:#000!important;border-color:#fff!important}
+.brand-mark,.profile-dot,.compose-avatar,.post-avatar,.side-avatar{color:#000!important;background:#fff!important;border-color:#fff!important}
+.eyebrow{color:#fff!important}
+.post-form textarea,.account-box input{color:#fff!important;background:#000!important;border-color:#fff!important;border-radius:0!important}
+.post-form textarea:focus{outline:1px solid #fff!important}
+.image-preview,.post-image{border-color:#fff!important;background:#000!important}
