@@ -161,6 +161,8 @@ header{box-sizing:border-box;background:#151515;color:#fff;position:relative;
 
 .post-form{padding:1.25rem;background:#171d19;border:1px solid #2b3730;box-shadow:0 14px 30px #050605}
 
+.post-form,.post,.moderator-panel{border-radius:18px}
+
 .composer-label{display:flex;gap:.8rem;align-items:flex-start}
 
 .compose-avatar{flex:0 0 36px;width:36px;height:36px;color:#0d100f;background:#ff826a}
@@ -181,6 +183,8 @@ header{box-sizing:border-box;background:#151515;color:#fff;position:relative;
 
 .post{padding:1.25rem;margin:1rem 0;background:#171d19;border:1px solid #2b3730;box-shadow:0 12px 24px #070907}
 
+.post{overflow:hidden}
+
 .post-header{display:flex;align-items:center;gap:.75rem}
 
 .post-avatar{width:38px;height:38px;color:#0d100f;background:#88a8ff}
@@ -198,6 +202,10 @@ header{box-sizing:border-box;background:#151515;color:#fff;position:relative;
 .post-actions button{color:#aab8ad;background:transparent;border-color:transparent}
 
 .post-actions button:hover{color:#d8f36b;background:#263225;border-color:#3b4d36}
+
+.post-actions button{border-radius:999px}
+
+.post-actions button[data-action="edit"],.post-actions button[data-action="delete"]{color:#ff9a87}
 
 .comment{color:#b9c5bb;background:#0d100f;border-left-color:#d8f36b}
 

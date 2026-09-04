@@ -43,6 +43,7 @@
 		const imageInput = document.querySelector('input[name="image"]');
 		const imagePreview = document.querySelector('#image-preview');
 		let posts = JSON.parse(localStorage.getItem('notai_posts') || '[]');
+		let accounts = JSON.parse(localStorage.getItem('notai_accounts') || '[]');
 		let selectedImage = '';
 
 		if (!user) window.location.href = 'index.html';
@@ -50,6 +51,7 @@
 		if (user && user.role === 'moderator') moderatorPanel.hidden = false;
 
 		function savePosts() { localStorage.setItem('notai_posts', JSON.stringify(posts)); }
+		function saveAccounts() { localStorage.setItem('notai_accounts', JSON.stringify(accounts)); }
 		function safe(value) { return String(value).replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character])); }
 		function formatContent(value) {
 			return safe(value).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>');
@@ -85,11 +87,14 @@
 						<button data-action="follow">Follow</button>
 						<button data-action="share">Share</button>
 						<button data-action="bookmark">${bookmarked ? 'Unbookmark' : 'Bookmark'}</button>
+						${String(post.userId) === String(user.id) ? '<button data-action="edit">Edit</button><button data-action="delete">Delete</button>' : ''}
 					</div>
 					${post.comments.map(comment => `<div class="comment"><strong>${safe(comment.username)}</strong>: ${safe(comment.content)}</div>`).join('')}
 				</article>`;
 			}).join('') : '<p>No posts yet. Write the first one.</p>';
-			moderatorContent.innerHTML = posts.length ? posts.map(post => `<p><strong>${safe(post.username)}</strong>: ${safe(post.content)} <button data-remove="${post.id}">Remove</button></p>`).join('') : '<p>No posts to moderate.</p>';
+			const accountList = accounts.map(account => `<p><strong>${safe(account.username)}</strong> <small>${safe(account.role)}</small> ${account.role !== 'moderator' ? `<button data-promote="${account.id}">Make moderator</button>` : ''}</p>`).join('') || '<p>No local accounts.</p>';
+			const postList = posts.map(post => `<p><strong>${safe(post.username)}</strong>: ${safe(post.content)} <button data-remove="${post.id}">Remove</button></p>`).join('') || '<p>No posts to moderate.</p>';
+			moderatorContent.innerHTML = `<h3>Accounts</h3>${accountList}<h3>Posts</h3>${postList}`;
 		}
 
 		postForm.addEventListener('submit', event => {
@@ -114,11 +119,22 @@
 			if (action === 'comment') { const content = window.prompt('Comment'); if (content) post.comments.push({username: user.username, content}); }
 			if (action === 'follow') feedResult.textContent = 'You are now following this person.';
 			if (action === 'share') { navigator.clipboard?.writeText(post.content); feedResult.textContent = 'Post shared.'; }
+			if (action === 'edit' && String(post.userId) === String(user.id)) {
+				const content = window.prompt('Edit post', post.content);
+				if (content !== null && content.trim()) post.content = content.trim();
+			}
+			if (action === 'delete' && String(post.userId) === String(user.id) && window.confirm('Delete your post?')) posts = posts.filter(item => item.id !== post.id);
 			savePosts();
 			render();
 		});
 
 		moderatorContent.addEventListener('click', event => {
+			const promoteId = Number(event.target.dataset.promote);
+			if (promoteId) {
+				const account = accounts.find(item => item.id === promoteId);
+				if (account) { account.role = 'moderator'; saveAccounts(); render(); }
+				return;
+			}
 			const id = Number(event.target.dataset.remove);
 			if (!id) return;
 			posts = posts.filter(post => post.id !== id);
