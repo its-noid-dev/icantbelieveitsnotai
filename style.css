@@ -273,3 +273,41 @@ header{box-sizing:border-box;background:#151515;color:#fff;position:relative;
 .tag-button:hover,.tag-button.active{color:#0b0e15;background:#e6ff6a;border-color:#e6ff6a}
 .inline-tag{padding:0;color:#e6ff6a;background:transparent;border:0;font:inherit;cursor:pointer}
 .inline-tag:hover{text-decoration:underline}
+
+/* Plain monochrome mode */
+.social-page{color:#fff;background:#000}
+.social-page header{position:static;background:#000;border-bottom:1px solid #fff;backdrop-filter:none}
+.social-page .brand-mark{color:#000;background:#fff;box-shadow:none;border-radius:0}
+.social-page .profile-dot{background:#fff;box-shadow:none;border-radius:0}
+.social-page .profile-chip{color:#fff}
+.social-page .account-actions button{color:#fff;background:#000;border-color:#fff;border-radius:0}
+.social-page .account-actions button:hover{color:#000;background:#fff;border-color:#fff}
+.social-main{width:min(760px,calc(100% - 2rem));padding:2rem 0 4rem}
+.app-grid{display:block}
+.feed-heading{padding:0;margin-bottom:1rem}
+.feed-heading h2{font-size:2rem;letter-spacing:0}
+.eyebrow{color:#fff;letter-spacing:.08em}
+.feed-tabs{margin-bottom:1rem}
+.feed-tabs button,.tag-button{color:#fff;background:#000;border:1px solid #fff;border-radius:0}
+.feed-tabs button.active,.feed-tabs button:hover,.tag-button.active,.tag-button:hover{color:#000;background:#fff;border-color:#fff}
+.post-form,.post,.moderator-panel{border-radius:0;background:#000;border:1px solid #fff;box-shadow:none}
+.post-form textarea{color:#fff;background:#000;border-color:#fff;border-radius:0}
+.post-form textarea:focus{outline:1px solid #fff}
+.editor-toolbar{border-top-color:#fff}
+.editor-toolbar button,.post-form .image-button{color:#fff;background:#000;border-color:#fff;border-radius:0}
+.editor-toolbar button:hover,.image-button:hover{color:#000;background:#fff;border-color:#fff}
+.post-form>button{color:#000;background:#fff;border-color:#fff;border-radius:0}
+.post-form>button:hover{color:#fff;background:#000}
+.post{transition:none}
+.post:hover{transform:none;border-color:#fff}
+.post-avatar,.compose-avatar{color:#000;background:#fff;box-shadow:none;border-radius:0}
+.post p{color:#fff}
+.post-image{border-color:#fff}
+.post-actions{border-top-color:#fff}
+.post-actions button{color:#fff;background:#000;border-color:#fff;border-radius:0}
+.post-actions button:hover{color:#000;background:#fff;border-color:#fff}
+.post-actions button[data-action="edit"],.post-actions button[data-action="delete"]{color:#fff}
+.post-actions button[data-action="edit"]:hover,.post-actions button[data-action="delete"]:hover{color:#000}
+.comment{color:#fff;background:#000;border-left-color:#fff}
+.hashtag-bar{margin-bottom:1rem}
+.social-page footer{background:#000;border-top:1px solid #fff}

@@ -30,10 +30,6 @@
 				<p id="feed-result" role="status"></p>
 				<section id="feed" aria-label="Community posts"></section>
 			</div>
-			<aside class="community-sidebar">
-				<section class="side-card"><p class="eyebrow">YOUR SPACE</p><h3><span class="side-avatar">N</span><span id="sidebar-user">Your profile</span></h3><p>Share what you are building, learning, or pretending to understand.</p><a href="#post-form">Create a post &rarr;</a></section>
-				<section class="side-card"><p class="eyebrow">HOW IT WORKS</p><p>Write something real, add a hashtag, and find posts by topic. No ranking theatre.</p></section>
-			</aside>
 		</div>
 		<section id="moderator-panel" class="moderator-panel" hidden>
 			<h2>Moderator page</h2>
@@ -59,7 +55,6 @@
 
 		if (!user) window.location.href = 'index.html';
 		currentUser.textContent = user ? user.username : '';
-		document.querySelector('#sidebar-user').textContent = user ? user.username : 'Your profile';
 		if (user && user.role === 'moderator') moderatorPanel.hidden = false;
 
 		function savePosts() { localStorage.setItem('notai_posts', JSON.stringify(posts)); }
