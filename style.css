@@ -126,3 +126,86 @@ header{box-sizing:border-box;background:#151515;color:#fff;position:relative;
  border:1px solid #000;font-weight:bold;cursor:pointer}
 
 .account-result{margin-bottom:0}
+
+.social-page{color:#edf2e8;background:#0d100f;text-align:left}
+
+.social-page header{padding:1rem clamp(1rem,4vw,3rem);background:#161b18;border-bottom:1px solid #2b3730}
+
+.social-page header h1{font-size:1rem;letter-spacing:.02em}
+
+.social-page header h1 a{display:flex;align-items:center;gap:.65rem;color:#edf2e8;text-decoration:none}
+
+.brand-mark,.profile-dot,.compose-avatar,.post-avatar{display:grid;place-items:center;border-radius:50%;font-weight:bold}
+
+.brand-mark{width:28px;height:28px;color:#0d100f;background:#d8f36b}
+
+.profile-chip{display:flex;align-items:center;gap:.5rem;color:#d8f36b;font-size:.85rem}
+
+.profile-dot{width:9px;height:9px;background:#d8f36b;box-shadow:0 0 0 4px #334328}
+
+.social-page .account-actions button{color:#edf2e8;background:transparent;border-color:#536156}
+
+.social-page .account-actions button:hover{background:#d8f36b;color:#0d100f;border-color:#d8f36b}
+
+.social-main{width:min(92%,720px);margin:3.5rem auto 4rem}
+
+.feed-heading{display:flex;align-items:end;justify-content:space-between;margin-bottom:1.5rem}
+
+.feed-heading h2{margin:0;font-size:clamp(1.8rem,5vw,2.8rem);letter-spacing:-.05em}
+
+.eyebrow{margin:0 0 .4rem;color:#d8f36b;font-size:.68rem;font-weight:bold;letter-spacing:.16em}
+
+.feed-status{color:#9ba89e;font-size:.78rem}
+
+.feed-status i{display:inline-block;width:7px;height:7px;margin-right:.35rem;background:#79df9a;border-radius:50%}
+
+.post-form{padding:1.25rem;background:#171d19;border:1px solid #2b3730;box-shadow:0 14px 30px #050605}
+
+.composer-label{display:flex;gap:.8rem;align-items:flex-start}
+
+.compose-avatar{flex:0 0 36px;width:36px;height:36px;color:#0d100f;background:#ff826a}
+
+.composer-label label{flex:1;color:#9ba89e;font-size:.85rem}
+
+.post-form textarea{min-height:105px;margin-top:.55rem;color:#edf2e8;background:#0d100f;border:1px solid #344138;font:inherit;resize:vertical}
+
+.post-form textarea:focus{outline:2px solid #d8f36b;outline-offset:1px}
+
+.editor-toolbar{padding-top:.75rem;border-top:1px solid #2b3730}
+
+.editor-toolbar button,.post-form .image-button{border-radius:4px}
+
+.post-form>button{margin-top:.8rem;color:#0d100f;background:#d8f36b;border-color:#d8f36b;font-weight:bold}
+
+.post-form>button:hover{background:#f0ff9c}
+
+.post{padding:1.25rem;margin:1rem 0;background:#171d19;border:1px solid #2b3730;box-shadow:0 12px 24px #070907}
+
+.post-header{display:flex;align-items:center;gap:.75rem}
+
+.post-avatar{width:38px;height:38px;color:#0d100f;background:#88a8ff}
+
+.post-header strong{display:block;color:#edf2e8}
+
+.post-header small{display:block;margin-top:.2rem;color:#839087}
+
+.post p{margin:1rem 0;color:#d8e0d7;line-height:1.6}
+
+.post-image{max-height:420px;border:1px solid #344138}
+
+.post-actions{padding-top:.85rem;border-top:1px solid #2b3730}
+
+.post-actions button{color:#aab8ad;background:transparent;border-color:transparent}
+
+.post-actions button:hover{color:#d8f36b;background:#263225;border-color:#3b4d36}
+
+.comment{color:#b9c5bb;background:#0d100f;border-left-color:#d8f36b}
+
+.moderator-panel{background:#171d19;border-color:#d8f36b}
+
+@media (max-width:600px){
+	.social-page header{align-items:flex-start;flex-direction:column}
+	.social-page .account-actions{width:100%;justify-content:space-between}
+	.social-main{margin-top:2rem}
+	.feed-heading{align-items:flex-start;gap:1rem;flex-direction:column}
+}

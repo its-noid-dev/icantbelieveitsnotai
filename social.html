@@ -6,15 +6,15 @@
 	<title>Community - I Can't Believe It's Not AI!</title>
 	<link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="social-page">
 	<header>
-		<h1><a href="index.html">I Can't Believe It's Not AI!</a></h1>
-		<div class="account-actions"><strong id="current-user"></strong><button type="button" id="logout">Log out</button></div>
+		<h1><a href="index.html"><span class="brand-mark">N</span>I Can't Believe It's Not AI!</a></h1>
+		<div class="account-actions"><strong class="profile-chip"><span class="profile-dot"></span><span id="current-user"></span></strong><button type="button" id="logout">Log out</button></div>
 	</header>
 	<main class="social-main">
-		<h2>Community feed</h2>
+		<div class="feed-heading"><div><p class="eyebrow">THE LIVE FEED</p><h2>Community feed</h2></div><span class="feed-status"><i></i> local network</span></div>
 		<form id="post-form" class="post-form">
-			<label>What are you thinking?<textarea name="content" maxlength="500" required></textarea></label>
+			<div class="composer-label"><span class="compose-avatar">Y</span><label>What are you thinking?<textarea name="content" maxlength="500" required></textarea></label></div>
 			<div class="editor-toolbar" aria-label="Post formatting tools">
 				<button type="button" data-format="bold" aria-label="Bold" title="Bold"><strong>B</strong></button>
 				<button type="button" data-format="italic" aria-label="Italic" title="Italic"><em>I</em></button>
@@ -76,7 +76,7 @@
 				const liked = post.likes.includes(user.id);
 				const bookmarked = post.bookmarks.includes(user.id);
 				return `<article class="post" data-id="${post.id}">
-					<strong>${safe(post.username)}</strong> <small>${safe(post.createdAt)}</small>
+					<div class="post-header"><span class="post-avatar">${safe(post.username.charAt(0).toUpperCase())}</span><div><strong>${safe(post.username)}</strong><small>${safe(post.createdAt)}</small></div></div>
 					<p>${formatContent(post.content)}</p>
 					${post.image ? `<img class="post-image" src="${safe(post.image)}" alt="Photo shared by ${safe(post.username)}">` : ''}
 					<div class="post-actions">
