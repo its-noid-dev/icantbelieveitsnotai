@@ -9,7 +9,7 @@ import urllib.parse
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASE = os.path.join(BASE_DIR, "icanbelieveitsnotai.db")
 HOST = "0.0.0.0"
-PORT = 8000
+PORT = int(os.environ.get("PORT", "80"))
 
 
 def hash_password(password, salt=None):
