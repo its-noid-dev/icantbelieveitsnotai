@@ -106,6 +106,7 @@
 			const text = await response.text();
 			let result;
 			try { result = JSON.parse(text); } catch (error) {
+				if (response.status === 405) throw new Error('The public domain blocks POST requests. Set the custom domain target port to 80 so it reaches this app.');
 				throw new Error(`HTTP ${response.status}: server returned non-JSON: ${text.slice(0, 120)}`);
 			}
 			if (!response.ok) throw new Error(result.message || `HTTP ${response.status}: request failed.`);
