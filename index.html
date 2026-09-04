@@ -216,7 +216,7 @@
 					accountResult.textContent = result.message;
 					accountForm.reset();
 					accountPanel.hidden = true;
-					showSocialApp();
+					window.location.href = 'social.html';
 				} catch (fallbackError) {
 					accountResult.textContent = `DEBUG ERROR: ${error.name === 'AbortError' ? 'Request timed out after 8 seconds.' : error.message} Local fallback: ${fallbackError.message}`;
 				}
