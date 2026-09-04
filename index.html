@@ -27,6 +27,20 @@
 			<li><label><input type="checkbox" class="requirement"> You are not a robot.</label></li>
 		</ul>
 		<p>So yeah, if you passed the list, why not join?.</p>
+		<section class="social-app" id="social-app" hidden>
+			<h2>Community feed</h2>
+			<form id="post-form">
+				<label>What are you thinking?<textarea name="content" maxlength="500" required></textarea></label>
+				<button type="submit">Post</button>
+			</form>
+			<p class="feed-result" id="feed-result" role="status"></p>
+			<div id="feed"></div>
+			<section class="moderator-panel" id="moderator-panel" hidden>
+				<h2>Moderator page</h2>
+				<p>Manage users and remove posts from the community.</p>
+				<div id="moderator-content"></div>
+			</section>
+		</section>
 	</main>
 
 	<div class="account-panel" id="account-panel" hidden>
@@ -71,6 +85,60 @@
 		const accountForm = document.querySelector('#account-form');
 		const signupOnly = document.querySelector('.signup-only');
 		const accountResult = document.querySelector('.account-result');
+		const API_BASE = window.location.protocol === 'file:' ? 'http://hackclub.app:8000' : '';
+		const socialApp = document.querySelector('#social-app');
+		const feed = document.querySelector('#feed');
+		const postForm = document.querySelector('#post-form');
+		const feedResult = document.querySelector('#feed-result');
+		const moderatorPanel = document.querySelector('#moderator-panel');
+		const moderatorContent = document.querySelector('#moderator-content');
+		let currentUser = JSON.parse(localStorage.getItem('notai_user') || 'null');
+
+		function escapeHtml(value) {
+			return String(value).replace(/[&<>'"]/g, character => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[character]));
+		}
+
+		async function api(path, options = {}) {
+			const headers = {'Content-Type': 'application/json', ...(options.headers || {})};
+			const token = localStorage.getItem('notai_token');
+			if (token) headers.Authorization = `Bearer ${token}`;
+			const response = await fetch(`${API_BASE}${path}`, {...options, headers});
+			const result = await response.json();
+			if (!response.ok) throw new Error(result.message || 'Request failed.');
+			return result;
+		}
+
+		function showSocialApp() {
+			socialApp.hidden = false;
+			if (currentUser && currentUser.role === 'moderator') moderatorPanel.hidden = false;
+			loadPosts();
+			if (currentUser && currentUser.role === 'moderator') loadModerator();
+		}
+
+		async function loadPosts() {
+			try {
+				const result = await api('/api/posts', {method: 'GET'});
+				feed.innerHTML = result.posts.length ? result.posts.map(post => `
+					<article class="post" data-post-id="${post.id}">
+						<strong>${escapeHtml(post.username)}</strong><small>${escapeHtml(post.created_at)}</small>
+						<p>${escapeHtml(post.content)}</p>
+						<div class="post-actions">
+							<button data-action="like">${post.liked ? 'Unlike' : 'Like'} (${post.likes})</button>
+							<button data-action="comment">Comment (${post.comments})</button>
+							<button data-action="follow" data-user-id="${post.user_id}">Follow</button>
+							<button data-action="share">Share</button>
+							<button data-action="bookmark">${post.bookmarked ? 'Unbookmark' : 'Bookmark'}</button>
+						</div>
+					</article>`).join('') : '<p>No posts yet. Be the first.</p>';
+			} catch (error) { feedResult.textContent = error.message; }
+		}
+
+		async function loadModerator() {
+			try {
+				const result = await api('/api/moderator', {method: 'GET'});
+				moderatorContent.innerHTML = `<p>${result.users.length} users, ${result.posts.length} posts.</p>` + result.posts.map(post => `<p><strong>${escapeHtml(post.username)}</strong>: ${escapeHtml(post.content)} <button data-remove-post="${post.id}">Remove</button></p>`).join('');
+			} catch (error) { moderatorContent.textContent = error.message; }
+		}
 
 		function openAccount(mode) {
 			accountTitle.textContent = mode === 'signup' ? 'Sign up' : 'Log in';
@@ -100,15 +168,56 @@
 			event.preventDefault();
 			accountResult.textContent = 'Working...';
 			const mode = accountForm.dataset.mode;
-			const response = await fetch(`/api/${mode}`, {
-				method: 'POST',
-				headers: {'Content-Type': 'application/json'},
-				body: JSON.stringify(Object.fromEntries(new FormData(accountForm)))
-			});
-			const result = await response.json();
-			accountResult.textContent = result.message;
-			if (response.ok) accountForm.reset();
+			try {
+				const response = await fetch(`${API_BASE}/api/${mode}`, {
+					method: 'POST',
+					headers: {'Content-Type': 'application/json'},
+					body: JSON.stringify(Object.fromEntries(new FormData(accountForm)))
+				});
+				const result = await response.json();
+				accountResult.textContent = result.message || 'The request could not be completed.';
+				if (response.ok && result.token) {
+					localStorage.setItem('notai_token', result.token);
+					localStorage.setItem('notai_user', JSON.stringify(result.user));
+					currentUser = result.user;
+					accountForm.reset();
+					accountPanel.hidden = true;
+					showSocialApp();
+				}
+			} catch (error) {
+				accountResult.textContent = 'Could not reach the server. Check that the app is running.';
+			}
 		});
+		postForm.addEventListener('submit', async event => {
+			event.preventDefault();
+			try {
+				await api('/api/posts', {method: 'POST', body: JSON.stringify(Object.fromEntries(new FormData(postForm)))});
+				postForm.reset();
+				feedResult.textContent = 'Posted.';
+				loadPosts();
+			} catch (error) { feedResult.textContent = error.message; }
+		});
+		feed.addEventListener('click', async event => {
+			const button = event.target.closest('button[data-action]');
+			if (!button) return;
+			const post = button.closest('[data-post-id]');
+			const action = button.dataset.action;
+			try {
+				if (action === 'comment') {
+					const content = window.prompt('Comment');
+					if (!content) return;
+					await api(`/api/posts/${post.dataset.postId}/comment`, {method: 'POST', body: JSON.stringify({content})});
+				} else if (action === 'follow') {
+					await api(`/api/users/${button.dataset.userId}`, {method: 'POST'});
+				} else await api(`/api/posts/${post.dataset.postId}/${action}`, {method: 'POST'});
+				loadPosts();
+			} catch (error) { feedResult.textContent = error.message; }
+		});
+		moderatorContent.addEventListener('click', async event => {
+			if (!event.target.matches('[data-remove-post]')) return;
+			try { await api(`/api/moderator/posts/${event.target.dataset.removePost}`, {method: 'DELETE'}); loadModerator(); loadPosts(); } catch (error) { moderatorContent.textContent = error.message; }
+		});
+		if (localStorage.getItem('notai_token')) showSocialApp();
 	</script>
 </body>
 </html>
