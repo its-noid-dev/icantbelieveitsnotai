@@ -120,6 +120,23 @@
 			if (currentUser && currentUser.role === 'moderator') loadModerator();
 		}
 
+		function localAccount(mode, formData) {
+			const accounts = JSON.parse(localStorage.getItem('notai_accounts') || '[]');
+			const email = String(formData.get('email')).trim().toLowerCase();
+			const password = String(formData.get('password'));
+			if (mode === 'signup') {
+				if (accounts.some(account => account.email === email)) throw new Error('This email is already registered in this browser.');
+				const username = String(formData.get('username')).trim();
+				const account = {id: Date.now(), username, email, password, role: username.toLowerCase() === 'noid.dev' ? 'moderator' : 'user'};
+				accounts.push(account);
+				localStorage.setItem('notai_accounts', JSON.stringify(accounts));
+				return {message: 'Account created locally. Demo mode is active.', token: `local-${account.id}`, user: account};
+			}
+			const account = accounts.find(item => item.email === email && item.password === password);
+			if (!account) throw new Error('Email or password is incorrect in this browser.');
+			return {message: 'Logged in locally. Demo mode is active.', token: `local-${account.id}`, user: account};
+		}
+
 		async function loadPosts() {
 			try {
 				const result = await api('/api/posts', {method: 'GET'});
@@ -191,7 +208,18 @@
 					showSocialApp();
 				}
 			} catch (error) {
-				accountResult.textContent = `DEBUG ERROR: ${error.name === 'AbortError' ? 'Request timed out after 8 seconds.' : error.message}`;
+				try {
+					const result = localAccount(mode, new FormData(accountForm));
+					localStorage.setItem('notai_token', result.token);
+					localStorage.setItem('notai_user', JSON.stringify(result.user));
+					currentUser = result.user;
+					accountResult.textContent = result.message;
+					accountForm.reset();
+					accountPanel.hidden = true;
+					showSocialApp();
+				} catch (fallbackError) {
+					accountResult.textContent = `DEBUG ERROR: ${error.name === 'AbortError' ? 'Request timed out after 8 seconds.' : error.message} Local fallback: ${fallbackError.message}`;
+				}
 			} finally {
 				clearTimeout(timeout);
 			}
