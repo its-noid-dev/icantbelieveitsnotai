@@ -12,8 +12,11 @@
 		<div class="account-actions"><strong class="profile-chip"><span class="profile-dot"></span><span id="current-user"></span></strong><button type="button" id="logout">Log out</button></div>
 	</header>
 	<main class="social-main">
-		<div class="feed-heading"><div><p class="eyebrow">THE LIVE FEED</p><h2>Community feed</h2></div><span class="feed-status"><i></i> local network</span></div>
-		<form id="post-form" class="post-form">
+		<div class="app-grid">
+			<div class="feed-column">
+				<div class="feed-heading"><div><p class="eyebrow">THE LIVE FEED</p><h2>Community feed</h2></div><span class="feed-status"><i></i> local network</span></div>
+				<nav class="feed-tabs" aria-label="Feed filters"><button class="active" type="button">For you</button><button type="button">Following</button><button type="button">Popular</button><button type="button">Newest</button></nav>
+				<form id="post-form" class="post-form">
 			<div class="composer-label"><span class="compose-avatar">Y</span><label>What are you thinking?<textarea name="content" maxlength="500" required></textarea></label></div>
 			<div class="editor-toolbar" aria-label="Post formatting tools">
 				<button type="button" data-format="bold" aria-label="Bold" title="Bold"><strong>B</strong></button>
@@ -22,9 +25,15 @@
 			</div>
 			<img class="image-preview" id="image-preview" alt="Selected post preview" hidden>
 			<button type="submit">Post</button>
-		</form>
-		<p id="feed-result" role="status"></p>
-		<section id="feed" aria-label="Community posts"></section>
+				</form>
+				<p id="feed-result" role="status"></p>
+				<section id="feed" aria-label="Community posts"></section>
+			</div>
+			<aside class="community-sidebar">
+				<section class="side-card"><p class="eyebrow">YOUR SPACE</p><h3><span class="side-avatar">N</span><span id="sidebar-user">Your profile</span></h3><p>Share what you are building, learning, or pretending to understand.</p><a href="#post-form">Create a post &rarr;</a></section>
+				<section class="side-card"><p class="eyebrow">TRENDING NOW</p><ul><li>#humanthoughts <small>128 posts</small></li><li>#notanai <small>84 posts</small></li><li>#buildinpublic <small>41 posts</small></li></ul></section>
+			</aside>
+		</div>
 		<section id="moderator-panel" class="moderator-panel" hidden>
 			<h2>Moderator page</h2>
 			<p>Manage community posts.</p>
@@ -48,6 +57,7 @@
 
 		if (!user) window.location.href = 'index.html';
 		currentUser.textContent = user ? user.username : '';
+		document.querySelector('#sidebar-user').textContent = user ? user.username : 'Your profile';
 		if (user && user.role === 'moderator') moderatorPanel.hidden = false;
 
 		function savePosts() { localStorage.setItem('notai_posts', JSON.stringify(posts)); }
