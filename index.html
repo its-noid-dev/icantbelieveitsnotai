@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>I Can't Believe It's Not AI!</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<header>
+		<h1>I Can't Believe It's Not AI!</h1>
+		<div class="account-actions">
+			<span class="signup-wrap">
+				<button type="button" id="signup" disabled>Sign up</button>
+				<span class="signup-message">Confirm you aren't a robot!.</span>
+			</span>
+			<button type="button" id="login">Log in</button>
+		</div>
+	</header>
+
+	<main>
+		<h2>A social media for non-AI beings.</h2>
+		<p>So only join if you meet the following criteria:</p>
+		<ul class="requirements">
+			<li><label><input type="checkbox" class="requirement"> You are not an AI.</label></li>
+			<li><label><input type="checkbox" class="requirement"> You are a living human being.</label></li>
+			<li><label><input type="checkbox" class="requirement"> You are not a robot.</label></li>
+		</ul>
+		<p>So yeah, if you passed the list, why not join?.</p>
+
+		<section class="project-links" aria-label="Project links">
+			<h3>Keep this thing alive</h3>
+			<p>
+				<a href="https://github.com/its-noid-dev" target="_blank" rel="noopener noreferrer">its-noid-dev on GitHub</a>
+				<span>|</span>
+				<a href="https://github.com/its-noid-dev/Icantbelieveitsnotai" target="_blank" rel="noopener noreferrer">View the repo</a>
+			</p>
+			<div class="repo-stats">
+				<a href="https://github.com/its-noid-dev/Icantbelieveitsnotai" target="_blank" rel="noopener noreferrer">
+					<img src="https://img.shields.io/github/stars/its-noid-dev/Icantbelieveitsnotai?style=flat&label=stars" alt="GitHub stars">
+				</a>
+				<a href="https://github.com/its-noid-dev" target="_blank" rel="noopener noreferrer">
+					<img src="https://komarev.com/ghpvc/?username=its-noid-dev&label=views&color=grey" alt="Profile views">
+				</a>
+			</div>
+			<p><a class="help-link" href="https://github.com/its-noid-dev/Icantbelieveitsnotai/issues" target="_blank" rel="noopener noreferrer">Help improve the repo &rarr;</a></p>
+		</section>
+
+	</main>
+
+	<footer>
+		<p>Made for Hack Club</p>
+		<p>&copy; 2026 Noid.DEV</p>
+	</footer>
+
+	<script>
+		const requirements = document.querySelectorAll('.requirement');
+		const signup = document.querySelector('#signup');
+
+		function updateSignupState() {
+			const allChecked = [...requirements].every(requirement => requirement.checked);
+			signup.disabled = !allChecked;
+			signup.parentElement.classList.toggle('unlocked', allChecked);
+		}
+
+		requirements.forEach(requirement => requirement.addEventListener('change', updateSignupState));
+	</script>
+</body>
+</html>

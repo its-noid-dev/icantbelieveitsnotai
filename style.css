@@ -1,0 +1,65 @@
+footer p{margin:.25rem 0}
+
+.signup-wrap.unlocked .signup-message{display:none}
+
+a {color:#fff}
+
+body{background:#000;color:#fff;text-align:center;display:flex;
+ min-height:100vh;margin:0;font-family:Arial, Helvetica, sans-serif;
+ flex-direction:column}
+
+.signup-message{opacity:0;visibility:hidden;position:absolute;
+ right:0;top:calc(100% + .5rem);background:#fff;color:#000;
+ width:max-content;max-width:220px;padding:.5rem;font-size:.8rem}
+
+header h1{margin:0}
+
+.requirements label {cursor:pointer;display:flex;gap:.5rem;
+ align-items:center}
+
+footer{background:#151515;color:#fff;width:100%;box-sizing:border-box;
+ text-align:center;padding:.75rem 1rem}
+
+.account-actions button:disabled{cursor:not-allowed;border-color:#555;
+ background:#333;color:#888}
+
+main {flex:1}
+
+.project-links{margin:2rem auto;max-width:520px;padding:1rem;
+ border:1px solid #333;background:#0b0b0b}
+
+.project-links h3{margin:.25rem 0 1rem;font-size:1rem}
+
+.project-links p{line-height:1.7}
+
+.project-links span{color:#777;margin:0 .35rem}
+
+.project-links a{color:#fff}
+
+.repo-stats{display:flex;justify-content:center;gap:.5rem;margin:1rem 0}
+
+.repo-stats img{display:block;height:20px}
+
+.help-link{font-weight:bold}
+
+header{box-sizing:border-box;background:#151515;color:#fff;position:relative;
+ padding:.85rem 1.25rem;width:100%;display:flex;gap:1rem;
+ justify-content:space-between;align-items:center}
+
+.requirements li{margin:.5rem 0}
+
+.signup-wrap:hover .signup-message,
+.signup-wrap:focus-within .signup-message{opacity:1;visibility:visible}
+
+.account-actions{margin:0;display:flex;gap:.5rem;align-items:center}
+
+.requirements{padding:0;text-align:left;list-style:none;margin:1rem auto;
+ width:fit-content}
+
+.account-actions button:hover:not(:disabled){background:#151515;color:#fff}
+
+.signup-wrap{position:relative}
+
+.account-actions button{font-weight:bold;cursor:pointer;color:#000;
+ border:1px solid #fff;background:#fff;padding:.5rem .85rem;
+ font-size:.85rem}
