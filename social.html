@@ -15,7 +15,11 @@
 		<h2>Community feed</h2>
 		<form id="post-form" class="post-form">
 			<label>What are you thinking?<textarea name="content" maxlength="500" required></textarea></label>
-			<label class="image-picker">Add a photo<input type="file" name="image" accept="image/*"></label>
+			<div class="editor-toolbar" aria-label="Post formatting tools">
+				<button type="button" data-format="bold" aria-label="Bold" title="Bold"><strong>B</strong></button>
+				<button type="button" data-format="italic" aria-label="Italic" title="Italic"><em>I</em></button>
+				<label class="image-button" aria-label="Add a photo" title="Add a photo">&#128247;<input type="file" name="image" accept="image/*"></label>
+			</div>
 			<img class="image-preview" id="image-preview" alt="Selected post preview" hidden>
 			<button type="submit">Post</button>
 		</form>
@@ -47,6 +51,18 @@
 
 		function savePosts() { localStorage.setItem('notai_posts', JSON.stringify(posts)); }
 		function safe(value) { return String(value).replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character])); }
+		function formatContent(value) {
+			return safe(value).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>');
+		}
+		document.querySelectorAll('[data-format]').forEach(button => button.addEventListener('click', () => {
+			const editor = document.querySelector('textarea[name="content"]');
+			const start = editor.selectionStart;
+			const end = editor.selectionEnd;
+			const selected = editor.value.slice(start, end) || (button.dataset.format === 'bold' ? 'bold text' : 'italic text');
+			const marker = button.dataset.format === 'bold' ? '**' : '*';
+			editor.setRangeText(`${marker}${selected}${marker}`, start, end, 'select');
+			editor.focus();
+		}));
 		imageInput.addEventListener('change', () => {
 			const file = imageInput.files[0];
 			if (!file) { selectedImage = ''; imagePreview.hidden = true; return; }
@@ -61,7 +77,7 @@
 				const bookmarked = post.bookmarks.includes(user.id);
 				return `<article class="post" data-id="${post.id}">
 					<strong>${safe(post.username)}</strong> <small>${safe(post.createdAt)}</small>
-					<p>${safe(post.content)}</p>
+					<p>${formatContent(post.content)}</p>
 					${post.image ? `<img class="post-image" src="${safe(post.image)}" alt="Photo shared by ${safe(post.username)}">` : ''}
 					<div class="post-actions">
 						<button data-action="like">${liked ? 'Unlike' : 'Like'} (${post.likes.length})</button>
