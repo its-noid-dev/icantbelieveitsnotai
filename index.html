@@ -27,7 +27,23 @@
 			<li><label><input type="checkbox" class="requirement"> You are not a robot.</label></li>
 		</ul>
 		<p>So yeah, if you passed the list, why not join?.</p>
+	</main>
 
+	<div class="account-panel" id="account-panel" hidden>
+		<div class="account-box" role="dialog" aria-modal="true" aria-labelledby="account-title">
+			<button class="close-account" type="button" aria-label="Close account panel">&times;</button>
+			<h2 id="account-title">Sign up</h2>
+			<form id="account-form">
+				<label class="signup-only">Username<input name="username" autocomplete="username" required></label>
+				<label>Email<input name="email" type="email" autocomplete="email" required></label>
+				<label>Password<input name="password" type="password" autocomplete="current-password" minlength="6" required></label>
+				<button class="submit-account" type="submit">Continue</button>
+			</form>
+			<p class="account-result" role="status"></p>
+		</div>
+	</div>
+
+	<footer>
 		<section class="project-links" aria-label="Project links">
 			<h3>Keep this thing alive</h3>
 			<p>
@@ -39,16 +55,9 @@
 				<a href="https://github.com/its-noid-dev/Icantbelieveitsnotai" target="_blank" rel="noopener noreferrer">
 					<img src="https://img.shields.io/github/stars/its-noid-dev/Icantbelieveitsnotai?style=flat&label=stars" alt="GitHub stars">
 				</a>
-				<a href="https://github.com/its-noid-dev" target="_blank" rel="noopener noreferrer">
-					<img src="https://komarev.com/ghpvc/?username=its-noid-dev&label=views&color=grey" alt="Profile views">
-				</a>
 			</div>
 			<p><a class="help-link" href="https://github.com/its-noid-dev/Icantbelieveitsnotai/issues" target="_blank" rel="noopener noreferrer">Help improve the repo &rarr;</a></p>
 		</section>
-
-	</main>
-
-	<footer>
 		<p>Made for Hack Club</p>
 		<p>&copy; 2026 Noid.DEV</p>
 	</footer>
@@ -56,6 +65,23 @@
 	<script>
 		const requirements = document.querySelectorAll('.requirement');
 		const signup = document.querySelector('#signup');
+		const login = document.querySelector('#login');
+		const accountPanel = document.querySelector('#account-panel');
+		const accountTitle = document.querySelector('#account-title');
+		const accountForm = document.querySelector('#account-form');
+		const signupOnly = document.querySelector('.signup-only');
+		const accountResult = document.querySelector('.account-result');
+
+		function openAccount(mode) {
+			accountTitle.textContent = mode === 'signup' ? 'Sign up' : 'Log in';
+			accountForm.dataset.mode = mode;
+			signupOnly.hidden = mode !== 'signup';
+			signupOnly.querySelector('input').required = mode === 'signup';
+			accountForm.reset();
+			accountResult.textContent = '';
+			accountPanel.hidden = false;
+			accountForm.querySelector('input:not([hidden])').focus();
+		}
 
 		function updateSignupState() {
 			const allChecked = [...requirements].every(requirement => requirement.checked);
@@ -64,6 +90,25 @@
 		}
 
 		requirements.forEach(requirement => requirement.addEventListener('change', updateSignupState));
+		signup.addEventListener('click', () => openAccount('signup'));
+		login.addEventListener('click', () => openAccount('login'));
+		document.querySelector('.close-account').addEventListener('click', () => accountPanel.hidden = true);
+		accountPanel.addEventListener('click', event => {
+			if (event.target === accountPanel) accountPanel.hidden = true;
+		});
+		accountForm.addEventListener('submit', async event => {
+			event.preventDefault();
+			accountResult.textContent = 'Working...';
+			const mode = accountForm.dataset.mode;
+			const response = await fetch(`/api/${mode}`, {
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
+				body: JSON.stringify(Object.fromEntries(new FormData(accountForm)))
+			});
+			const result = await response.json();
+			accountResult.textContent = result.message;
+			if (response.ok) accountForm.reset();
+		});
 	</script>
 </body>
 </html>
