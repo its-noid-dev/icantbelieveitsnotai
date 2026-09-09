@@ -1,29 +1,22 @@
+# I can4t believe it's not ai
 
-# I can't believe it's not ai!
-
-A social media like site for REAL HUMANS ONLY.
-
-
-## FAQ
-
-#### Can ai join?
-
-ABSOLUTELY NOT
-
-#### What if i see ai?
-
-Please report it as ai slop, or don't, but please do!
-
-### Okay that's all.
-
-Uhhh okay?
+A simple social media for humans!
+Join and make the community greater and bigger, i enjoy it anytime someone joins, so make me happy plz.
 
 
-## Roadmap
+## Getting Started
 
-- More features
+### Dependencies
 
-- More stuff
+* Just any browser
 
-- I don't know, maybe like, icecream?
+### Joining
 
+* Just go to [its-noid.dev.github.io/icantbelieveitsnotai](https://its-noid-dev.github.io/icantbelieveitsnotai/)
+## Help
+
+If you are resent to the homepage, just sign in or log in.
+
+<img width="1513" height="859" alt="image" src="https://github.com/user-attachments/assets/28c30329-5d14-4dc4-915b-44a9389ad52b" />
+
+<img width="1551" height="647" alt="image" src="https://github.com/user-attachments/assets/a860e78f-1db7-4168-b55f-11ecae2e3db7" />
