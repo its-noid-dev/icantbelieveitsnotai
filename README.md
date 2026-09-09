@@ -1,4 +1,4 @@
-# I can4t believe it's not ai
+# I can't believe it's not ai
 
 A simple social media for humans!
 Join and make the community greater and bigger, i enjoy it anytime someone joins, so make me happy plz.
